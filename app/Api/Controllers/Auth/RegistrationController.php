@@ -62,7 +62,7 @@ class RegistrationController extends Controller
             $user = $this->create($data);
             $user->roles()
                  ->attach($data['role_id']);
-            $activation_link = 'localhost:300\\activate\\' . $user->confirmation_code;
+
             $this->dispatch(new SendRegistrationEmail($user));
             return "Registration Successfull";
         } else {
