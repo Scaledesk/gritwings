@@ -14,7 +14,7 @@ class ChildServiceTransformer extends TransformerAbstract
      * @return array
      */
     protected $defaultIncludes = [
-        'parent_service'
+
     ];
 
     public function transform(ChildService $item)
@@ -23,8 +23,20 @@ class ChildServiceTransformer extends TransformerAbstract
             'id'                => $item->id,
             'name'              => $item->name,
             'parent_service_id' => $item->parent_service_id,
+            'parent_service_name'=> $this->parent_service_name($item)
 
         ];
+    }
+
+    public function parent_service_name(ChildService $childService)
+    {
+        if($childService->parentService)
+        {
+            return $childService->parentService->name;
+        }
+        else{
+            return null;
+        }
     }
 
     public function includeParentService(ChildService $childService)

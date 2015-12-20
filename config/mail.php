@@ -120,9 +120,4 @@ return [
     */
 
     'pretend' => false,
-
-    'to' => [
-        'address' => 'kartikagarwal.1993@gmail.com',
-        'name' => 'Kartik Agarwal'
-    ],
 ];

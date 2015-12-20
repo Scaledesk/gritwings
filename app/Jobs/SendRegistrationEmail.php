@@ -37,7 +37,7 @@ class SendRegistrationEmail extends Job implements SelfHandling, ShouldQueue
         $user = $this->user;
         Mail::send('email.registration',array('name'=>$user->name,'link'=>$user->confirmation_code), function($message)use($user) {
             $message->to($user->email, $user->name)
-                    ->subject('Acknowledgement');
+                    ->subject('Confirmation Email');
         });
 
 
