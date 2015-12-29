@@ -70,4 +70,7 @@ class User extends Model implements AuthenticatableContract,AuthorizableContract
     {
         return $this->hasMany('App\RoleUser', 'user_id', 'id');
     }
+    public function services(){
+        return $this->belongsToMany('App\ChildService','expert_services','expert_id','child_services_id');
+    }
 }

@@ -1,9 +1,11 @@
 <?php namespace App\Api\Controllers;
 
 use App\Api\Controllers\Controller;
+use App\ChildService;
 use App\User;
 use App\Api\Transformers\UserTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use League\Fractal\Manager;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 class UserController extends Controller
@@ -49,4 +51,11 @@ class UserController extends Controller
         $item = $this->model()->findOrFail(Authorizer::getResourceOwnerId());
         return $this->respondWithItem($item);
     }
+        public function attachChildServiceToUser(){
+            $service_ids=Input::get('services_ids','');
+            $user = User::findOrFail(Authorizer::getResourceOwnerId());
+                $user->services()->attach($service_ids);
+
+            return $this->success();
+        }
 }

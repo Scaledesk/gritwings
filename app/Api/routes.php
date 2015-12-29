@@ -12,6 +12,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     //Registration Routes
     Route::post('auth/register','Auth\RegistrationController@register');
     Route::get('register/verify/{confirmationCode}','Auth\RegistrationController@confirm');
+    Route::post('addServiceToUser','UserController@attachChildServiceToUser');
 
 
     Route::post('auth/login', function() {
