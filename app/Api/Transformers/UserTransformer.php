@@ -14,7 +14,8 @@ class UserTransformer extends TransformerAbstract
      protected $defaultIncludes = [
 //        'assignments',
 //        'role_user',
-        'roles'
+        'roles',
+         'services'
         ];
 
     public function transform(User $item)
@@ -81,6 +82,10 @@ class UserTransformer extends TransformerAbstract
     public function includeRoles(User $user){
         return $this->collection($user->roles()
                                          ->get(), new RoleTransformer());
+    }
+    public function includeservices(User $user){
+        return $this->collection($user->services()
+                                         ->get(), new ChildServiceTransformer());
     }
 }
 

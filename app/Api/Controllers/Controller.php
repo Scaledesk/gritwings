@@ -21,11 +21,17 @@ abstract class Controller extends BaseController
         if($status_code==""){
             $status_code=200;
         }
-        return $this->response()->array([
+        $this->setStatusCode(200);
+       return $this->respondWithArray([
+            'message'=>$message,
+            'status_code'=>$status_code,
+           key(func_get_arg(2))=>func_get_arg(2)[key(func_get_arg(2))]
+        ]);
+        /*return $this->response()->array([
             'message'=>$message,
             'status_code'=>$status_code,
             key(func_get_arg(2))=>func_get_arg(2)[key(func_get_arg(2))]
-        ])->statusCode($status_code);
+        ])->statusCode($status_code);*/
 
     }
     public function errorWithData($message='error',$status_code=404){

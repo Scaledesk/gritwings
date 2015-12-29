@@ -6,6 +6,7 @@ use App\User;
 use App\Api\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use League\Fractal\Manager;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 class UserController extends Controller
@@ -54,8 +55,7 @@ class UserController extends Controller
         public function attachChildServiceToUser(){
             $service_ids=Input::get('services_ids','');
             $user = User::findOrFail(Authorizer::getResourceOwnerId());
-                $user->services()->attach($service_ids);
-
+                $user->services()->sync($service_ids);
             return $this->success();
         }
 }
