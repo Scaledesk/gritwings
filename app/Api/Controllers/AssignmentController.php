@@ -3,6 +3,7 @@
 use App\Api\Controllers\Controller;
 use App\Assignment;
 use App\Api\Transformers\AssignmentTransformer;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class AssignmentController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('oauth');
+//        $this->middleware('oauth');
 
         $this->model       = $this->model();
         $this->transformer = $this->transformer();
@@ -80,32 +81,7 @@ class AssignmentController extends Controller
 
         return $this->respondWithItem($item);
     }
-    public function update($id)
-    {
-        $data = $this->request->json()->get($this->resourceKeySingular);
 
-        if (!$data) {
-            return $this->errorWrongArgs('Empty data');
-        }
-
-        $item = $this->findItem($id);
-        if (!$item) {
-            return $this->errorNotFound();
-        }
-
-
-        $this->unguardIfNeeded();
-
-        $item->fill($data);
-
-        if($data['bidders'])
-        {
-            return $data['bidders'];
-        }
-        $item->save();
-
-        return $this->respondWithItem($item);
-    }
     public function getUserAssignmentsByStatus($statusId)
     {
         $userId = Authorizer::getResourceOwnerId();
@@ -153,5 +129,16 @@ class AssignmentController extends Controller
 
         $items = $this->model->where('status_id',7)->whereIn('child_service_id',$arr)->get();
         return $this->respondWithCollection($items);
+    }
+
+    public function updateAssignmentBidders($assignmentId){
+
+        $data = Input::get('data');
+        $bidders = $data['bidders'];
+        DB::delete('delete from bidder_assignment where assignment_id = ?',[$assignmentId]);
+        foreach($bidders as $bidder){
+            DB::insert('insert into bidder_assignment (assignment_id, bidder_id) values (?, ?)', [$assignmentId, $bidder]);
+        }
+        return $this->respondWithItem($this->model()->findorFail($assignmentId));
     }
 }

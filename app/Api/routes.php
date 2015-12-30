@@ -52,6 +52,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('expert-assignments/{statusId}', 'AssignmentController@getExpertAssignmentsByStatus');
     Route::get('expert-available-assignments', 'AssignmentController@getExpertAvailableAssignments');
     Route::get('experts-of-service/{serviceId}', 'UserController@getExpertsOfService');
+    Route::post('bidders-of-assignment/{assignmentId}', 'AssignmentController@updateAssignmentBidders');
 
     Route::resource('roles', 'RoleController');
     Route::resource('bids', 'BidController');
