@@ -228,4 +228,11 @@ class MessagesController extends Controller
 
         return redirect('messages/' . $id);
     }
+    public function checkThread()
+    {
+        $thread_id = Input::get('thread_id');
+        $thread = Thread::where('id', $thread_id)->first();
+        unset($thread_id);
+        return ["read"=>$thread->isUnread(Authorizer::getResourceOwnerId())];
+    }
 }
