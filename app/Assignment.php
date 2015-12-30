@@ -19,6 +19,8 @@ class Assignment extends Model
     const EXPERT_COMMENTS  = 'expert_comments';
     const PAYMENT_STATUS   = 'payment_status';
     const FAILED_REASON = 'failed_reason';
+    const BOOKING_AMOUNT = 'booking_amount';
+    const COMMISSION = 'commission';
     protected $table      = 'assignments';
     protected $fillable   = [
         'id',
@@ -35,7 +37,9 @@ class Assignment extends Model
         'user_file_url',
         'expert_comments',
         'payment_status',
-        'failed_reason'
+        'failed_reason',
+        'commission',
+        'booking_amount'
     ];
     public    $timestamps = false;
 
@@ -63,4 +67,5 @@ class Assignment extends Model
     {
         return $this->hasMany('App\Bid', 'assignment_id', 'id');
     }
+
 }

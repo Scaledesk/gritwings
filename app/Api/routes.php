@@ -50,6 +50,8 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::put('update-profile', 'UserController@updateProfile');
     Route::get('expert-undergoing-assignments', 'AssignmentController@getExpertUndergoingAssignments');
     Route::get('expert-assignments/{statusId}', 'AssignmentController@getExpertAssignmentsByStatus');
+    Route::get('expert-available-assignments', 'AssignmentController@getExpertAvailableAssignments');
+    Route::get('experts-of-service/{serviceId}', 'UserController@getExpertsOfService');
 
     Route::resource('roles', 'RoleController');
     Route::resource('bids', 'BidController');

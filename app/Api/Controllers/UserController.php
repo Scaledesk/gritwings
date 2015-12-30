@@ -52,6 +52,15 @@ class UserController extends Controller
         return $this->respondWithItem($item);
     }
 
+
+    public function getExpertsOfService($serviceId){
+        $users = $this->model()->whereHas('childServices', function ($query) use($serviceId) {
+            $query->where('id', $serviceId);
+        })->get();
+
+        return $this->respondWithCollection($users);
+
+    }
     public function updateProfile(){
         $data = $this->request->json()->get($this->resourceKeySingular);
         if (!$data) {

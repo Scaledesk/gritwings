@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use League\Fractal\Manager;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
-
+use App\User;
 class AssignmentController extends Controller
 {
     /**
@@ -80,7 +80,32 @@ class AssignmentController extends Controller
 
         return $this->respondWithItem($item);
     }
+    public function update($id)
+    {
+        $data = $this->request->json()->get($this->resourceKeySingular);
 
+        if (!$data) {
+            return $this->errorWrongArgs('Empty data');
+        }
+
+        $item = $this->findItem($id);
+        if (!$item) {
+            return $this->errorNotFound();
+        }
+
+
+        $this->unguardIfNeeded();
+
+        $item->fill($data);
+
+        if($data['bidders'])
+        {
+            return $data['bidders'];
+        }
+        $item->save();
+
+        return $this->respondWithItem($item);
+    }
     public function getUserAssignmentsByStatus($statusId)
     {
         $userId = Authorizer::getResourceOwnerId();
@@ -115,6 +140,18 @@ class AssignmentController extends Controller
         $items = $this->model->where('status_id',$statusId)->whereHas('bid', function ($query) {
             $query->where('user_id', Authorizer::getResourceOwnerId());
         })->get();
+        return $this->respondWithCollection($items);
+    }
+
+    public function getExpertAvailableAssignments(){
+        $userId = Authorizer::getResourceOwnerId();
+        $services = User::findorFail($userId)->childServices()->get();
+        $arr = [];
+        foreach($services as $service){
+        array_push($arr,$service['id']);
+        }
+
+        $items = $this->model->where('status_id',7)->whereIn('child_service_id',$arr)->get();
         return $this->respondWithCollection($items);
     }
 }

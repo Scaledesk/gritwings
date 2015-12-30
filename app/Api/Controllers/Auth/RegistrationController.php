@@ -44,7 +44,7 @@ class RegistrationController extends Controller
 
     public function register()
     {
-        $enabled_registrations = [2];
+        $enabled_registrations = [2,3];
 
         $confirmation_code = str_random(30);
 
