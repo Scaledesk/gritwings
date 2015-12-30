@@ -138,6 +138,13 @@ class MessagesController extends Controller
            /* print_r("Admin-".Input::get('recipients')[0]);
             print_r($thread);
             die;*/
+            if(is_null($thread)){
+                $thread = Thread::create(
+                    [
+                        'subject' => "Admin-".Input::get('recipients')[0],
+                    ]
+                );
+            }
         }
         if(is_null($thread)){
             $thread = Thread::create(
