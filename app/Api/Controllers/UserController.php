@@ -4,7 +4,9 @@ use App\Api\Controllers\Controller;
 use App\User;
 use App\Api\Transformers\UserTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use League\Fractal\Manager;
+use Illuminate\Support\Facades\Input;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 class UserController extends Controller
 {
@@ -48,5 +50,26 @@ class UserController extends Controller
     public function myProfile(){
         $item = $this->model()->findOrFail(Authorizer::getResourceOwnerId());
         return $this->respondWithItem($item);
+    }
+
+    public function updateProfile(){
+        $data = $this->request->json()->get($this->resourceKeySingular);
+        if (!$data) {
+            return $this->errorWrongArgs('Empty data');
+        }
+
+        $user = User::findOrFail(Authorizer::getResourceOwnerId());
+
+        if (!$user) {
+            return $this->errorNotFound();
+        }
+        $services= $data['child_services'];
+                        $user->childServices()->sync($services);
+//             return $this->success();
+//        $item = $this->model()->findOrFail(Authorizer::getResourceOwnerId());
+//        if($this->request->has('child_services')){
+//            die();
+//        }
+//        return $this->respondWithItem($item);
     }
 }

@@ -15,7 +15,7 @@ class UserTransformer extends TransformerAbstract
 //        'assignments',
 //        'role_user',
         'roles',
-         'child-services'
+         'child_services'
         ];
 
     public function transform(User $item)

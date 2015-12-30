@@ -47,6 +47,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::resource('parent_services', 'ParentServiceController');
     Route::resource('users', 'UserController');
     Route::get('my-profile', 'UserController@myProfile');
+    Route::put('update-profile', 'UserController@updateProfile');
     Route::get('expert-undergoing-assignments', 'AssignmentController@getExpertUndergoingAssignments');
     Route::get('expert-assignments/{statusId}', 'AssignmentController@getExpertAssignmentsByStatus');
 
