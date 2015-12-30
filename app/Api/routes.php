@@ -12,6 +12,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     //Registration Routes
     Route::post('auth/register','Auth\RegistrationController@register');
     Route::get('register/verify/{confirmationCode}','Auth\RegistrationController@confirm');
+    Route::post('addServiceToUser','UserController@attachChildServiceToUser');
 
 
     Route::post('auth/login', function() {
@@ -56,4 +57,13 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
 
     Route::resource('roles', 'RoleController');
     Route::resource('bids', 'BidController');
+    Route::get('messages/getNewThreads','MessagesController@getNewThreads');
+});
+//messages routes
+Route::group(['prefix' => 'api/v1/messages','namespace' => 'App\Api\Controllers'], function () {
+    Route::get('/', ['as' => 'messages', 'uses' => 'MessagesController@index']);
+    Route::get('create', ['as' => 'messages.create', 'uses' => 'MessagesController@create']);
+    Route::post('/', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
+    Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
+    Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
 });

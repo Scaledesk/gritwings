@@ -15,7 +15,8 @@
     "barryvdh/laravel-cors": "^0.7.2",
     "lucadegasperi/oauth2-server-laravel": "^5.0",
     "guzzlehttp/guzzle": "^6.1",
-    "laravel/socialite": "^2.0"
+    "laravel/socialite": "^2.0",
+    "cmgmyr/messenger": "~2.0"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

@@ -19,5 +19,7 @@ class ChildService extends Model {
         return $this->hasMany('App\Assignment', 'child_service_id', 'id');
     }
 
-
+    public function users(){
+        return $this->belongsToMany('App\User','expert_services','child_services_id','expert_id');
+    }
 }

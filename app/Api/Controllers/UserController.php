@@ -1,6 +1,7 @@
 <?php namespace App\Api\Controllers;
 
 use App\Api\Controllers\Controller;
+use App\ChildService;
 use App\User;
 use App\Api\Transformers\UserTransformer;
 use Illuminate\Http\Request;

@@ -145,6 +145,7 @@ return [
         'User11001\EloquentModelGenerator\EloquentModelGeneratorProvider',
 
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Cmgmyr\Messenger\MessengerServiceProvider::class, //messenger
     ],
     /*
     |--------------------------------------------------------------------------

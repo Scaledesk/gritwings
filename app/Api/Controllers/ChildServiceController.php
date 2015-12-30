@@ -25,4 +25,5 @@ class ChildServiceController extends Controller
     {
         return new ChildServiceTransformer;
     }
+
 }
