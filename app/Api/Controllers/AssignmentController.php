@@ -39,7 +39,7 @@ class AssignmentController extends Controller
      */
     public function __construct(Request $request)
     {
-//        $this->middleware('oauth');
+        $this->middleware('oauth');
 
         $this->model       = $this->model();
         $this->transformer = $this->transformer();
