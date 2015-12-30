@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use Cmgmyr\Messenger\Traits\Messagable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -11,7 +12,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class User extends Model implements AuthenticatableContract,AuthorizableContract,CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, Authorizable, CanResetPassword,  Messagable;
     const ID                                = 'id';
     const NAME                              = 'name';
     const EMAIL                             = 'email';
