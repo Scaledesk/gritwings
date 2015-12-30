@@ -58,6 +58,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::resource('roles', 'RoleController');
     Route::resource('bids', 'BidController');
     Route::get('messages/getNewThreads','MessagesController@getNewThreads');
+    Route::get('messages/isUnread','MessagesController@checkThread');
 });
 //messages routes
 Route::group(['prefix' => 'api/v1/messages','namespace' => 'App\Api\Controllers'], function () {
