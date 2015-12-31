@@ -181,7 +181,7 @@ class MessagesController extends Controller
             $thread->addParticipants([$this->admin_id]);
         }
 
-        return $this->success();
+        return $this->successWithData('','',['thread_id'=>$thread->id]);
     }
 
     /**
