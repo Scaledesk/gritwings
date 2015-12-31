@@ -90,11 +90,14 @@ class MessagesController extends Controller
      */
     public function show($id)
     {
-        try {
-            $thread = Thread::findOrFail($id);
-        } catch (ModelNotFoundException $e) {
+        $thread = Thread::where('subject', "Assignment-" .$id.Input::get('user_id'))->first();
+        if(is_null($thread)){
+            try {
+                $thread = Thread::findOrFail($id);
+            } catch (ModelNotFoundException $e) {
 
-            return $this->error('The thread with ID: ' . $id . ' was not found.', 404);
+                return $this->error('The thread with ID: ' . $id . ' was not found.', 404);
+            }
         }
 
         // show current user in list if not a current participant
@@ -134,20 +137,32 @@ class MessagesController extends Controller
     public function store()
     {
         $input = Input::all();
-        $thread = Thread::where('subject', "Admin-" . Authorizer::getResourceOwnerId())->first();
-        if (Input::has('recipients')) {
-            $thread = Thread::where('subject', "Admin-" . Input::get('recipients')[0])->first();
-            /* print_r("Admin-".Input::get('recipients')[0]);
-             print_r($thread);
-             die;*/
+        if(Input::has('assignment_id')){
+            $thread = Thread::where('subject', "Assignment-" . Input::get('assignment_id').Input::get('user_id'))->first();
+            if(is_null($thread)){
+                $thread = Thread::create(
+                    [
+                        'subject' => "Assignment-" . Input::get("assignment_id").Input::get('user_id'),
+                    ]
+                );
+            }
         }
-        if (is_null($thread)) {
-            $thread = Thread::create(
-                [
-                    'subject' => "Admin-" . Authorizer::getResourceOwnerId(),
-                ]
-            );
-        }
+//        else{
+//            $thread = Thread::where('subject', "Admin-" . Authorizer::getResourceOwnerId())->first();
+//            if (Input::has('recipients')) {
+//                $thread = Thread::where('subject', "Admin-" . Input::get('recipients')[0])->first();
+//                /* print_r("Admin-".Input::get('recipients')[0]);
+//                 print_r($thread);
+//                 die;*/
+//            }
+//            if (is_null($thread)) {
+//                $thread = Thread::create(
+//                    [
+//                        'subject' => "Admin-" . Authorizer::getResourceOwnerId(),
+//                    ]
+//                );
+//            }
+//        }
 
         // Message
         Message::create(
@@ -175,8 +190,7 @@ class MessagesController extends Controller
         } else {
             $thread->addParticipants([$this->admin_id]);
         }
-
-        return $this->success();
+        return $this->successWithData('','',['thread_id'=>$thread->id]);
     }
 
     /**
