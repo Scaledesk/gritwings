@@ -37,7 +37,11 @@ class AssignmentTransformer extends TransformerAbstract
             Assignment::USER_FILE_URL   => $item->user_file_url,
             Assignment::EXPERT_FILE_URL => $item->expert_file_url,
             Assignment::PAYMENT_STATUS => $item->payment_status,
-            Assignment::FAILED_REASON => $item->failed_reason
+            Assignment::FAILED_REASON => $item->failed_reason,
+            Assignment::URGENCY => $item->urgency,
+            Assignment::EXPECTED_COST => $item->expected_cost,
+            'commission' => $item->commission,
+            'booking_amount' => $item->booking_amount
 
         ];
     }
