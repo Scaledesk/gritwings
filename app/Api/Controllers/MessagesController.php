@@ -90,15 +90,27 @@ class MessagesController extends Controller
      */
     public function show($id)
     {
+        /*print_r($id);
+        print_r(Input::get('user_id'));*/
         $thread = Thread::where('subject', "Assignment-" .$id.Input::get('user_id'))->first();
-        if(is_null($thread)){
+        /*print_r($thread);
+        die;*/
+       /* if(is_null($thread)){
             try {
                 $thread = Thread::findOrFail($id);
             } catch (ModelNotFoundException $e) {
 
                 return $this->error('The thread with ID: ' . $id . ' was not found.', 404);
             }
+        }*/
+        if(is_null($thread)){
+                $thread = Thread::create(
+                    [
+                        'subject' => "Assignment-" .$id.Input::get('user_id'),
+                    ]
+                );
         }
+
 
         // show current user in list if not a current participant
         // $users = User::whereNotIn('id', $thread->participantsUserIds())->get();
