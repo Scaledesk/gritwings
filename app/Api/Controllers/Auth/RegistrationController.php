@@ -2,7 +2,9 @@
 
 namespace App\Api\Controllers\Auth;
 
+use App\Api\Transformers\UserTransformer;
 use App\Http\Controllers\Controller;
+use App\Userextra;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use App\User;
@@ -64,6 +66,13 @@ class RegistrationController extends Controller
                  ->attach($data['role_id']);
 
             $this->dispatch(new SendRegistrationEmail($user));
+            $role=Role::where('name','Expert')->select(['id'])->first();
+            if(!is_null($role)){
+                $role_id=$role->id;
+                if($role_id==$data['role_id']){
+                    $this->insertExtra($user->id);
+                }
+            }
             return "Registration Successfull";
         } else {
             return "Validation Error";
@@ -90,5 +99,11 @@ class RegistrationController extends Controller
         $this->dispatch(new SendConfirmationEmail($user));
 
         return "confirmed";
+    }
+    public function insertExtra($user_id=NULL){
+        $data=call_user_func(array(new UserTransformer(),'userExtraTransformer'));
+        $data=array_filter($data,'strlen');
+        $data['user_id']=$user_id;
+        Userextra::create($data);
     }
 }
