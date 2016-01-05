@@ -75,11 +75,5 @@ class UserController extends Controller
         }
         $services= $data['child_services'];
                         $user->childServices()->sync($services);
-//             return $this->success();
-//        $item = $this->model()->findOrFail(Authorizer::getResourceOwnerId());
-//        if($this->request->has('child_services')){
-//            die();
-//        }
-//        return $this->respondWithItem($item);
     }
 }

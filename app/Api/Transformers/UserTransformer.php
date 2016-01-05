@@ -101,6 +101,7 @@ class UserTransformer extends TransformerAbstract
             'linkedin_url'=>Input::get('linkedin_url',NULL),
             'facebook_url'=>Input::get('facebook_url',NULL),
             'resume_url'=>Input::get('resume_url',NULL),
+            'research_gate_id'=>Input::get('research_gate_id',NULL),
         ];
     }
 }

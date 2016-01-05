@@ -55,13 +55,20 @@ class RegistrationController extends Controller
                  'email'             => Input::get('email'),
                  'password'          => Input::get('password'),
                  'role_id'           => Input::get('role_id'),
+                 User::MOBILE_NUMBER           => Input::get('mobile_number',NULL),
+                 User::DESCRIPTION           => Input::get('description',NULL),
+                 User::IMAGE           => Input::get('image',NULL),
+                 User::BIRTH_DATE           => Input::get('birth_date',NULL),
+                 User::GENDER=> Input::get('gender',NULL),
+
                  'confirmation_code' => $confirmation_code
         ];
         if (!in_array($data['role_id'], $enabled_registrations)) {
             return "Invalid role";
         }
         if ($this->validator($data)) {
-            $user = $this->create($data);
+            $data=array_filter($data,'strlen');
+            $user = User::create($data);
             $user->roles()
                  ->attach($data['role_id']);
 

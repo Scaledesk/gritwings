@@ -21,7 +21,8 @@ class Userextra extends Model
         'linkedin_url',
         'resume_url',
         'facebook_url',
-        'user_id'
+        'user_id',
+        'research_gate_id'
     ];
     public    $timestamps = false;
     public function user(){
