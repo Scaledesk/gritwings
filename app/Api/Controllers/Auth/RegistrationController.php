@@ -72,12 +72,19 @@ class RegistrationController extends Controller
             $user->roles()
                  ->attach($data['role_id']);
 
-            $this->dispatch(new SendRegistrationEmail($user));
+
             $role=Role::where('name','Expert')->select(['id'])->first();
             if(!is_null($role)){
                 $role_id=$role->id;
                 if($role_id==$data['role_id']){
                     $this->insertExtra($user->id);
+                    function sendMailToAdmin(){
+                        //to be implemented
+                        // mail has to be sent to the admin all details of the newly signed up expert.
+                    }
+                    sendMailToAdmin();
+                }else{
+                    $this->dispatch(new SendRegistrationEmail($user));
                 }
             }
             return "Registration Successfull";
