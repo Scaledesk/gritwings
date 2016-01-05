@@ -83,7 +83,7 @@ class UserController extends Controller
         $role=Role::where('name','Expert')->select(['id'])->first();
         $experts=null;
         if(!is_null($role)){
-            $experts=$role->users()->select(['user_id','name','email'])->get();
+            $experts=$role->users()->where('confirmed',0)->select(['user_id','name','email'])->get();
         }
         if(is_null($experts)){
             $this->setStatusCode(404);
@@ -157,5 +157,13 @@ class UserController extends Controller
                 'status_code'=>200
             ]);
         }
+    }
+    public function getExpert($id){
+        $user=User::where('id',$id)->first();
+        $user['profile']=$user->userExtra;
+        return $this->respondWithArray([
+            'expert'=>$user,
+            'status_code'=>200
+        ]);
     }
 }
