@@ -59,10 +59,12 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::resource('bids', 'BidController');
     Route::get('messages/getNewThreads','MessagesController@getNewThreads');
     Route::get('messages/isUnread','MessagesController@checkThread');
+    Route::put('makeRead/{thread_id}','MessagesController@makeRead');
     Route::post('userExtra','Auth\RegistrationController@insertExtra');
     Route::get('newExperts','UserController@getNewExperts');
     Route::put('activateAccount/{id}','UserController@activateAccount');
     Route::get('getExpert/{id}','UserController@getExpert');
+
 });
 //messages routes
 Route::group(['prefix' => 'api/v1/messages','namespace' => 'App\Api\Controllers'], function () {

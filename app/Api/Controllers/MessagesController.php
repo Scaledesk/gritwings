@@ -124,7 +124,7 @@ class MessagesController extends Controller
                 $message->update(['is_read' => 1]);
             }
         }
-        $thread->markAsRead($userId);
+//        $thread->markAsRead($userId);
 
         return compact('thread', 'messages');
     }
@@ -257,7 +257,28 @@ class MessagesController extends Controller
         $thread_id = Input::get('thread_id');
         $thread = Thread::where('id', $thread_id)->first();
         unset($thread_id);
+        /*print_r(Authorizer::getResourceOwnerId());
+        die;*/
         return ["read"=>$thread->isUnread(Authorizer::getResourceOwnerId())];
     }
+    public function makeRead($id){
+        $thread=Thread::where('id',$id)->first();
+        if(is_null($thread)){
+            $this->setStatusCode(404);
+            return $this->respondWithArray([
+                'message'=>'Thread not found',
+                'status_code'=>404
+            ]);
+        }else{
+            $thread->markAsRead(Authorizer::getResourceOwnerId());
+            $this->setStatusCode(200);
+            return $this->respondWithArray([
+                'message'=>'success',
+                'status_code'=>200
+            ]);
+        }
+
+    }
+
 }
 
