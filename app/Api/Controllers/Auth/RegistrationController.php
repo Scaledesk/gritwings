@@ -2,7 +2,9 @@
 
 namespace App\Api\Controllers\Auth;
 
+use App\Api\Transformers\UserTransformer;
 use App\Http\Controllers\Controller;
+use App\Userextra;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use App\User;
@@ -53,17 +55,31 @@ class RegistrationController extends Controller
                  'email'             => Input::get('email'),
                  'password'          => Input::get('password'),
                  'role_id'           => Input::get('role_id'),
+                 User::MOBILE_NUMBER           => Input::get('mobile_number',NULL),
+                 User::DESCRIPTION           => Input::get('description',NULL),
+                 User::IMAGE           => Input::get('image',NULL),
+                 User::BIRTH_DATE           => Input::get('birth_date',NULL),
+                 User::GENDER=> Input::get('gender',NULL),
+
                  'confirmation_code' => $confirmation_code
         ];
         if (!in_array($data['role_id'], $enabled_registrations)) {
             return "Invalid role";
         }
         if ($this->validator($data)) {
-            $user = $this->create($data);
+            $data=array_filter($data,'strlen');
+            $user = User::create($data);
             $user->roles()
                  ->attach($data['role_id']);
 
             $this->dispatch(new SendRegistrationEmail($user));
+            $role=Role::where('name','Expert')->select(['id'])->first();
+            if(!is_null($role)){
+                $role_id=$role->id;
+                if($role_id==$data['role_id']){
+                    $this->insertExtra($user->id);
+                }
+            }
             return "Registration Successfull";
         } else {
             return "Validation Error";
@@ -90,5 +106,11 @@ class RegistrationController extends Controller
         $this->dispatch(new SendConfirmationEmail($user));
 
         return "confirmed";
+    }
+    public function insertExtra($user_id=NULL){
+        $data=call_user_func(array(new UserTransformer(),'userExtraTransformer'));
+        $data=array_filter($data,'strlen');
+        $data['user_id']=$user_id;
+        Userextra::create($data);
     }
 }

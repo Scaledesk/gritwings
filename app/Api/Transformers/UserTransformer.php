@@ -1,6 +1,7 @@
 <?php namespace App\Api\Transformers;
 
 use App\User;
+use Illuminate\Support\Facades\Input;
 use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract
@@ -86,6 +87,22 @@ class UserTransformer extends TransformerAbstract
     public function includeChildServices(User $user){
         return $this->collection($user->childServices()
             ->get(), new ChildServiceTransformer());
+    }
+    public function userExtraTransformer(){
+        return [
+            'salutation'=>Input::get('salutation',NULL),
+            'first_name'=>Input::get('first_name',NULL),
+            'last_name'=>Input::get('last_name',NULL),
+            'personal_email'=>Input::get('personal_email',NULL),
+            'highest_degree'=>Input::get('highest_degree',NULL),
+            'major_specialization'=>Input::get('major_specialization',NULL),
+            'profession'=>Input::get('profession',NULL),
+            'expert_area'=>Input::get('expert_area',NULL),
+            'linkedin_url'=>Input::get('linkedin_url',NULL),
+            'facebook_url'=>Input::get('facebook_url',NULL),
+            'resume_url'=>Input::get('resume_url',NULL),
+            'research_gate_id'=>Input::get('research_gate_id',NULL),
+        ];
     }
 }
 
