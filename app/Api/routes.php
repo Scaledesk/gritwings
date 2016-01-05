@@ -60,6 +60,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('messages/getNewThreads','MessagesController@getNewThreads');
     Route::get('messages/isUnread','MessagesController@checkThread');
     Route::post('userExtra','Auth\RegistrationController@insertExtra');
+    Route::get('newExperts','UserController@getNewExperts@getNewExperts');
 });
 //messages routes
 Route::group(['prefix' => 'api/v1/messages','namespace' => 'App\Api\Controllers'], function () {

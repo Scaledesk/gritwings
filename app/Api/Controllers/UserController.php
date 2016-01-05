@@ -2,6 +2,7 @@
 
 use App\Api\Controllers\Controller;
 use App\ChildService;
+use App\Role;
 use App\User;
 use App\Api\Transformers\UserTransformer;
 use Illuminate\Http\Request;
@@ -75,5 +76,36 @@ class UserController extends Controller
         }
         $services= $data['child_services'];
                         $user->childServices()->sync($services);
+    }
+    public function getNewExperts(){
+        $role=Role::where('name','Expert')->select(['id'])->first();
+        $experts=null;
+        if(!is_null($role)){
+            $experts=$role->users()->select(['user_id','name','email'])->get();
+        }
+        if(is_null($experts)){
+            $this->setStatusCode(404);
+            return $this->respondWithArray([
+                'experts'=>[],
+                'status_code'=>404
+            ]);
+        }else{
+            $transformed_data=[];
+            foreach($experts as $expert){
+                $data=[
+                    "id"=>$expert['user_id'],
+                    "name"=>$expert['name'],
+                    "email"=>$expert['email']
+                ];
+                array_push($transformed_data,$data);
+                unset($data);
+            }
+            unset($experts,$expert);
+        }
+        $this->setStatusCode(200);
+          return $this->respondWithArray([
+              'experts'=>$transformed_data,
+              'status_code'=>200
+          ]);
     }
 }
