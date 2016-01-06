@@ -92,7 +92,7 @@ class MessagesController extends Controller
     {
         /*print_r($id);
         print_r(Input::get('user_id'));*/
-        $thread = Thread::where('subject', "Assignment-" .$id.Input::get('user_id'))->first();
+        $thread = Thread::where('subject', "Assignment-" .$id."-".Input::get('user_id'))->first();
         /*print_r($thread);
         die;*/
        /* if(is_null($thread)){
@@ -106,7 +106,7 @@ class MessagesController extends Controller
         if(is_null($thread)){
                 $thread = Thread::create(
                     [
-                        'subject' => "Assignment-" .$id.Input::get('user_id'),
+                        'subject' => "Assignment-" .$id."-".Input::get('user_id'),
                     ]
                 );
         }
@@ -152,7 +152,7 @@ class MessagesController extends Controller
        
              
         if(Input::has('assignment_id')){
-            $thread = Thread::where('subject', "Assignment-" . Input::get('assignment_id').Input::get('user_id'))->first();
+            $thread = Thread::where('subject', "Assignment-" . Input::get('assignment_id')."-".Input::get('user_id'))->first();
             if(is_null($thread)){
                 $thread = Thread::create(
                     [

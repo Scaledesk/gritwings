@@ -64,6 +64,9 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('newExperts','UserController@getNewExperts');
     Route::put('activateAccount/{id}','UserController@activateAccount');
     Route::get('getExpert/{id}','UserController@getExpert');
+    Route::get('payment/{assignment_id}','AssignmentController@doPayment');
+    Route::post('payment_success','AssignmentController@successPayment');
+    Route::post('payment_failure','AssignmentController@failurePayment');
 
 });
 //messages routes
