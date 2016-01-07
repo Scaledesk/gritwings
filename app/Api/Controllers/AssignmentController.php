@@ -44,7 +44,7 @@ class AssignmentController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('oauth',['except'=>['doPayment','successPayment']]);
+        $this->middleware('oauth',['except'=>['successPayment']]);
 
         $this->model       = $this->model();
         $this->transformer = $this->transformer();
@@ -151,7 +151,7 @@ class AssignmentController extends Controller
     }
     public function doPayment($assignment_id){
         $transaction=Assignment_Transaction::where('assignment_id',$assignment_id)->where('payment_type','booking_amount')->first();
-        $userId = /*Authorizer::getResourceOwnerId();*/59;
+        $userId = Authorizer::getResourceOwnerId();
         $user=User::where('id',$userId)->first();
         $user_extra=Userextra::where('user_id',$userId)->first();
         $assignment=Assignment::where('id',$assignment_id)->first();
