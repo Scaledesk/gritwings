@@ -44,7 +44,7 @@ class AssignmentController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('oauth',['except'=>['successPayment']]);
+        $this->middleware('oauth',['except'=>['successPayment','completionFailurePayment','completionSuccessPayment','failurePayment',]]);
 
         $this->model       = $this->model();
         $this->transformer = $this->transformer();
@@ -169,7 +169,10 @@ class AssignmentController extends Controller
             "first_name"=>$first_name,
             "last_name"=>$last_name,
             "product_info"=>$product_info,
-        "amount"=>$amount]);
+        "amount"=>$amount,
+        "surl"=>"http://54.200.205.117/api/v1/payment_success/",
+        "furl"=>"http://54.200.205.117/api/v1/payment_failure/"
+        ]);
     }
 
     public function successPayment(){
@@ -183,10 +186,79 @@ class AssignmentController extends Controller
         ]);
         $assignment=Assignment::where('id',$assignment_id)->first();
         $assignment->update(['status_id'=>3]);
-        return Redirect::away('http://localhost:3000/#/payment/success');
+        return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=success');
 
     }
     public function failurePayment(){
-        return Redirect::away('http://localhost:3000/#/payment/failure');
+        return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=failure');
+    }
+    public function completionDoPayment($assignment_id){
+        $transaction=Assignment_Transaction::where('assignment_id',$assignment_id)->where('payment_type','completion_amount')->first();
+        $userId = Authorizer::getResourceOwnerId();
+        $user=User::where('id',$userId)->first();
+        $user_extra=Userextra::where('user_id',$userId)->first();
+        $assignment=Assignment::where('id',$assignment_id)->first();
+        unset($userId);
+        $email=$user->email;
+        $mobile=$user->mobile_number;
+        $first_name=/*$user_extra->first_name*/'Tushar';
+        $last_name=/*$user_extra->last_name*/"Agarwal";
+        $amount=$transaction->amount;
+        $product_info=$assignment_id;
+        unset($assignment,$user,$user_extra,$transaction);
+        return \Illuminate\Support\Facades\View::make('payumoney',[
+            "email"=>$email,
+            "mobile"=>$mobile,
+            "first_name"=>$first_name,
+            "last_name"=>$last_name,
+            "product_info"=>$product_info,
+        "amount"=>$amount,
+        "surl"=>"http://54.200.205.117/api/v1/completionPayment_success/",
+            "furl"=>"http://54.200.205.117/api/v1/completionPayment_failure/",]);
+    }
+
+    public function completionSuccessPayment(){
+        /*echo "done";*/
+        $assignment_id=$_POST['productinfo'];
+        $transaction=Assignment_Transaction::where('assignment_id',$assignment_id)->where('payment_type','booking_amount')->first();
+        $transaction->update([
+            'status'=>'payment_done',
+            'date'=>date('Y-m-d'),
+            'transaction_id'=>$_POST['txnid']
+        ]);
+        $assignment=Assignment::where('id',$assignment_id)->first();
+        $assignment->update(['status_id'=>6]);
+        return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=success');
+
+    }
+    public function completionFailurePayment(){
+        return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=failure');
+    }
+    public function insertTransactions($assignMent_id){
+        $assignment=Assignment::where('id',$assignMent_id)->first();
+        if(is_null($assignment)){
+            unset($assignment,$assignMent_id);
+            $this->setStatusCode(404);
+            return $this->respondWithArray([
+                'message'=>"Assignment not found",
+                'status_code'=>404
+            ]);
+        }else{
+            Assignment_Transaction::create([
+                'assignment_id'=>$assignMent_id,
+                'payment_type'=>'booking_amount',
+                'amount'=>$assignment->booking_amount,
+            ]);
+            Assignment_Transaction::create([
+                'assignment_id'=>$assignMent_id,
+                'payment_type'=>'completion_amount',
+                'amount'=>$assignment->completion_amount,
+            ]);
+        }
+        $this->setStatusCode(200);
+        return $this->respondWithArray([
+            'message'=>"success",
+            'status_code'=>200
+        ]);
     }
 }

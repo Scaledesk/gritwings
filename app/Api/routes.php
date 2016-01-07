@@ -66,7 +66,11 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('getExpert/{id}','UserController@getExpert');
     Route::get('payment/{assignment_id}','AssignmentController@doPayment');
     Route::post('payment_success','AssignmentController@successPayment');
-    Route::post('payment_failure','AssignmentController@failurePayment');
+    Route::get('payment_failure','AssignmentController@failurePayment');
+    Route::get('completionPayment/{assignment_id}','AssignmentController@completionDoPayment');
+    Route::post('completionPayment_success','AssignmentController@completionSuccessPayment');
+    Route::get('completionPayment_failure','AssignmentController@completionFailurePayment');
+    Route::post('insertTransactions/{assignment_id}','AssignmentController@insertTransactions');
 
 });
 //messages routes

@@ -10,14 +10,12 @@
 // $key='C0Dr8m';
 $salt='eCwWELxi';
 $key='gtKFFx';
-$surl='http://localhost:8000/api/v1/payment_success/';
 $phone=$mobile;
 if($amount==0){
   $amount=100;
 }
 
 $curl='http://localhost/payumoney/cancel';
-$furl='http://localhost/payumoney/failure.php';
 $txnid='PLS-10061-'.rand(999,9999);http://localhost:3000/#/user-dashboard
         print_r([
                 'sha512',$key.'|'.$txnid.'|'.$amount.'|'.$product_info.'|'.$first_name.'|'.$email.'|||||||||||'.$salt

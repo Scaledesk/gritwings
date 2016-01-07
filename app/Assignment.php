@@ -23,6 +23,9 @@ class Assignment extends Model
     const URGENCY = 'urgency';
     const BOOKING_AMOUNT = 'booking_amount';
     const COMMISSION = 'commission';
+    const COMPLETION_AMOUNT='completion_amount';
+    const TOTAL_AMOUNT='total_amount';
+
     protected $table      = 'assignments';
     protected $fillable   = [
         'id',
@@ -43,7 +46,9 @@ class Assignment extends Model
         'commission',
         'booking_amount',
         'expected_cost',
-        'urgency'
+        'urgency',
+        'total_amount',
+        'completion_amount'
     ];
     public    $timestamps = false;
 
