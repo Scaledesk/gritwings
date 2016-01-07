@@ -189,4 +189,31 @@ class AssignmentController extends Controller
     public function failurePayment(){
         return Redirect::away('http://localhost:3000/#/payment/failure');
     }
+    public function insertTransactions($assignMent_id){
+        $assignment=Assignment::where('id',$assignMent_id)->first();
+        if(is_null($assignment)){
+            unset($assignment,$assignMent_id);
+            $this->setStatusCode(404);
+            return $this->respondWithArray([
+                'message'=>"Assignment not found",
+                'status_code'=>404
+            ]);
+        }else{
+            Assignment_Transaction::create([
+                'assignment_id'=>$assignMent_id,
+                'payment_type'=>'booking_amount',
+                'amount'=>$assignment->booking_amount,
+            ]);
+            Assignment_Transaction::create([
+                'assignment_id'=>$assignMent_id,
+                'payment_type'=>'completion_amount',
+                'amount'=>$assignment->completion_amount,
+            ]);
+        }
+        $this->setStatusCode(200);
+        return $this->respondWithArray([
+            'message'=>"success",
+            'status_code'=>200
+        ]);
+    }
 }

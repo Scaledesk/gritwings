@@ -67,6 +67,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('payment/{assignment_id}','AssignmentController@doPayment');
     Route::post('payment_success','AssignmentController@successPayment');
     Route::post('payment_failure','AssignmentController@failurePayment');
+    Route::post('insertTransactions/{assignment_id}','AssignmentController@insertTransactions');
 
 });
 //messages routes
