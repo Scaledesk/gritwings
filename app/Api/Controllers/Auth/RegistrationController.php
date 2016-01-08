@@ -77,12 +77,34 @@ class RegistrationController extends Controller
             if(!is_null($role)){
                 $role_id=$role->id;
                 if($role_id==$data['role_id']){
-                    $this->insertExtra($user->id);
-                    function sendMailToAdmin(){
+                    $user_extra=$this->insertExtra($user->id);
+
                         //to be implemented
                         // mail has to be sent to the admin all details of the newly signed up expert.
-                    }
-                    sendMailToAdmin();
+                        $data=[
+                            "first_name"=>isset($user_extra->first_name)&&($user_extra->first_name)!=NULL?$user_extra->first_name:"not available",
+                            "last_name"=>isset($user_extra->last_name)&&($user_extra->last_name)!=NULL?$user_extra->last_name:"not available",
+                            "personal_email"=>isset($user_extra->personal_email)&&($user_extra->personal_email)!=NULL?$user_extra->personal_email:"not available",
+                            "highest_degree"=>isset($user_extra->highest_degree)&&($user_extra->highest_degree)!=NULL?$user_extra->highest_degree:"not available",
+                            "major_specialization"=>isset($user_extra->major_specialization)&&($user_extra->major_specialization)!=NULL?$user_extra->major_specialization:"not available",
+                            "profession"=>isset($user_extra->profession)&&($user_extra->profession)!=NULL?$user_extra->profession:"not available",
+                            "expert_area"=>isset($user_extra->expert_area)&&($user_extra->expert_area)!=NULL?$user_extra->expert_area:"not available",
+                            "linkedin_url"=>isset($user_extra->linkedin_url)&&($user_extra->linkedin_url)!=NULL?$user_extra->linkedin_url:"not available",
+                            "research_gate_id"=>isset($user_extra->research_gate_id)&&($user_extra->research_gate_id)!=NULL?$user_extra->research_gate_id:"not available",
+                            "facebook_url"=>isset($user_extra->facebook_url)&&($user_extra->facebook_url)!=NULL?$user_extra->facebook_url:"not available",
+                            "resume_url"=>isset($user_extra->resume_url)&&($user_extra->resume_url)!=NULL?$user_extra->resume_url:"not available",
+                            "email"=>isset($user->email)&&($user->email)!=NULL?$user->email:"not available",
+                            "mobile_number"=>isset($user->mobile_number)&&($user->mobile_number)!=NULL?$user->mobile_number:"not available",
+                            "description"=>isset($user->description)&&($user->description)!=NULL?$user->description:"not available",
+                            "gender"=>isset($user->gender)&&($user->gender)!=NULL?$user->gender:"not available",
+                            "birth_date"=>isset($user->birth_date)&&($user->birth_date)!=NULL?$user->birth_date:"not available",
+                            "image"=>isset($user->image)&&($user->image)!=NULL?$user->image:"not available",
+                        ];
+                        Mail::send('email.email_to_admin', $data, function ($message) {
+                            $message->to("tamyworld@gmail.com", "Admin")
+                                ->subject('New Expert Registration');
+                        });
+
                 }else{
                     $this->dispatch(new SendRegistrationEmail($user));
                 }
@@ -118,6 +140,7 @@ class RegistrationController extends Controller
         $data=call_user_func(array(new UserTransformer(),'userExtraTransformer'));
         $data=array_filter($data,'strlen');
         $data['user_id']=$user_id;
-        Userextra::create($data);
+        $user_extra=Userextra::create($data);
+        return $user_extra;
     }
 }
