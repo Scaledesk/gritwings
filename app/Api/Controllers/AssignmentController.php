@@ -44,7 +44,7 @@ class AssignmentController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('oauth',['except'=>['successPayment','completionFailurePayment','completionSuccessPayment','failurePayment',]]);
+        $this->middleware('oauth',['except'=>['doPayment','completionDoPayment','successPayment','completionFailurePayment','completionSuccessPayment','failurePayment',]]);
 
         $this->model       = $this->model();
         $this->transformer = $this->transformer();
@@ -149,13 +149,12 @@ class AssignmentController extends Controller
         }
         return $this->respondWithItem($this->model()->findorFail($assignmentId));
     }
-    public function doPayment($assignment_id){
+    public function doPayment($assignment_id,$user_id){
         $transaction=Assignment_Transaction::where('assignment_id',$assignment_id)->where('payment_type','booking_amount')->first();
-        $userId = Authorizer::getResourceOwnerId();
-        $user=User::where('id',$userId)->first();
-        $user_extra=Userextra::where('user_id',$userId)->first();
+        $user=User::where('id',$user_id)->first();
+        $user_extra=Userextra::where('user_id',$user_id)->first();
         $assignment=Assignment::where('id',$assignment_id)->first();
-        unset($userId);
+        unset($user_id);
         $email=$user->email;
         $mobile=$user->mobile_number;
         $first_name=/*$user_extra->first_name*/'Tushar';
@@ -171,7 +170,9 @@ class AssignmentController extends Controller
             "product_info"=>$product_info,
         "amount"=>$amount,
         "surl"=>"http://54.200.205.117/api/v1/payment_success/",
-        "furl"=>"http://54.200.205.117/api/v1/payment_failure/"
+        "furl"=>"http://54.200.205.117/api/v1/payment_failure/",
+//            "surl"=>"http://localhost:8000/api/v1/payment_success/",
+//        "furl"=>"http://localhost:8000/api/v1/payment_failure/"
         ]);
     }
 
@@ -186,19 +187,20 @@ class AssignmentController extends Controller
         ]);
         $assignment=Assignment::where('id',$assignment_id)->first();
         $assignment->update(['status_id'=>3]);
+//        return Redirect::away('http://localhost:3000/#/user-dashboard?a=active-assignments&payment=success');
         return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=success');
 
     }
     public function failurePayment(){
         return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=failure');
+//        return Redirect::away('http://localhost:3000/#/user-dashboard?a=active-assignments&payment=failure');
     }
-    public function completionDoPayment($assignment_id){
+    public function completionDoPayment($assignment_id,$user_id){
         $transaction=Assignment_Transaction::where('assignment_id',$assignment_id)->where('payment_type','completion_amount')->first();
-        $userId = Authorizer::getResourceOwnerId();
-        $user=User::where('id',$userId)->first();
-        $user_extra=Userextra::where('user_id',$userId)->first();
+        $user=User::where('id',$user_id)->first();
+        $user_extra=Userextra::where('user_id',$user_id)->first();
         $assignment=Assignment::where('id',$assignment_id)->first();
-        unset($userId);
+        unset($user_id);
         $email=$user->email;
         $mobile=$user->mobile_number;
         $first_name=/*$user_extra->first_name*/'Tushar';
@@ -213,8 +215,11 @@ class AssignmentController extends Controller
             "last_name"=>$last_name,
             "product_info"=>$product_info,
         "amount"=>$amount,
-        "surl"=>"http://54.200.205.117/api/v1/completionPayment_success/",
+//        "surl"=>"http://localhost:8000/api/v1/completionPayment_success/",
+//            "furl"=>"http://localhost:8000/api/v1/completionPayment_failure/"
+            "surl"=>"http://54.200.205.117/api/v1/completionPayment_success/",
             "furl"=>"http://54.200.205.117/api/v1/completionPayment_failure/",]);
+//]);
     }
 
     public function completionSuccessPayment(){
@@ -229,10 +234,12 @@ class AssignmentController extends Controller
         $assignment=Assignment::where('id',$assignment_id)->first();
         $assignment->update(['status_id'=>6]);
         return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=success');
+//        return Redirect::away('http://localhost:3000/#/user-dashboard?a=active-assignments&payment=success');
 
     }
     public function completionFailurePayment(){
         return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=failure');
+//        return Redirect::away('http://localhost:3000/#/user-dashboard?a=active-assignments&payment=failure');
     }
     public function insertTransactions($assignMent_id){
         $assignment=Assignment::where('id',$assignMent_id)->first();

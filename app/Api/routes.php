@@ -64,10 +64,10 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('newExperts','UserController@getNewExperts');
     Route::put('activateAccount/{id}','UserController@activateAccount');
     Route::get('getExpert/{id}','UserController@getExpert');
-    Route::get('payment/{assignment_id}','AssignmentController@doPayment');
+    Route::get('payment/{assignment_id}/{user_id}','AssignmentController@doPayment');
     Route::post('payment_success','AssignmentController@successPayment');
     Route::get('payment_failure','AssignmentController@failurePayment');
-    Route::get('completionPayment/{assignment_id}','AssignmentController@completionDoPayment');
+    Route::get('completionPayment/{assignment_id}/{user_id}','AssignmentController@completionDoPayment');
     Route::post('completionPayment_success','AssignmentController@completionSuccessPayment');
     Route::get('completionPayment_failure','AssignmentController@completionFailurePayment');
     Route::post('insertTransactions/{assignment_id}','AssignmentController@insertTransactions');
