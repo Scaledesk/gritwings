@@ -71,7 +71,13 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::post('completionPayment_success','AssignmentController@completionSuccessPayment');
     Route::get('completionPayment_failure','AssignmentController@completionFailurePayment');
     Route::post('insertTransactions/{assignment_id}','AssignmentController@insertTransactions');
+    Route::get('notify','UserController@notify');
+    Route::get('notifications','UserController@getUserNotifications');
+    Route::get('new-notifications','UserController@getUserNewNotifications');
 
+    Route::get('read/{id}',function($id){
+        return  Notifynder::readOne($id);
+    });
 });
 //messages routes
 Route::group(['prefix' => 'api/v1/messages','namespace' => 'App\Api\Controllers'], function () {

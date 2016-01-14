@@ -146,6 +146,8 @@ return [
 
         Laravel\Socialite\SocialiteServiceProvider::class,
         Cmgmyr\Messenger\MessengerServiceProvider::class, //messenger
+
+        'Fenos\Notifynder\NotifynderServiceProvider'
     ],
     /*
     |--------------------------------------------------------------------------
@@ -195,7 +197,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
         'Socialize' => Laravel\Socialite\SocialiteServiceProvider::class,
-
+        'Notifynder'    => 'Fenos\Notifynder\Facades\Notifynder'
     ],
 
 ];

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Response;
 use League\Fractal\Manager;
 use Illuminate\Support\Facades\Input;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
+use Fenos\Notifynder\Facades\Notifynder;
+
 class UserController extends Controller
 {
     /**
@@ -163,6 +165,24 @@ class UserController extends Controller
         $user['profile']=$user->userExtra;
         return $this->respondWithArray([
             'expert'=>$user,
+            'status_code'=>200
+        ]);
+    }
+    public function getUserNotifications(){
+        $paginatedBool = (Input::has('paginatedBool') && Input::get('paginatedBool') == 1)?1:0;
+        return Notifynder::getAll(18,5,$paginatedBool);
+    }
+    public function getUserNewNotifications(){
+        $paginatedBool = (Input::has('paginationBool') && Input::get('paginationBool') == 1)?1:0;
+        return Notifynder::getNotRead(18,5,$paginatedBool);
+    }
+    public function notify(){
+        Notifynder::category(Input::get('category'))
+            ->from(Input::get('fromId'))
+            ->to(Input::get('toId'))
+            ->url(Input::get('url'))
+            ->send();
+        return $this->respondWithArray([
             'status_code'=>200
         ]);
     }
