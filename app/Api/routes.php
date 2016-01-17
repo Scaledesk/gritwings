@@ -42,7 +42,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::resource('package_statuses', 'PackageStatusController');
     Route::resource('assignments', 'AssignmentController');
     Route::get('my-assignments/{statusId}', 'AssignmentController@getUserAssignmentsByStatus');
-    Route::get('all-assignments/{statusId}', 'AssignmentController@getAllAssignmentsByStatus');
+    Route::get('all-assignments/{statusId}/{serviceId}', 'AssignmentController@getAllAssignmentsByStatus');
     Route::resource('assignment_statuses', 'AssignmentStatusController');
     Route::resource('child_services', 'ChildServiceController');
     Route::resource('parent_services', 'ParentServiceController');
@@ -54,7 +54,6 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('expert-available-assignments', 'AssignmentController@getExpertAvailableAssignments');
     Route::get('experts-of-service/{serviceId}', 'UserController@getExpertsOfService');
     Route::post('bidders-of-assignment/{assignmentId}', 'AssignmentController@updateAssignmentBidders');
-
     Route::resource('roles', 'RoleController');
     Route::resource('bids', 'BidController');
     Route::get('messages/getNewThreads','MessagesController@getNewThreads');
