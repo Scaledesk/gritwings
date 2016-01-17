@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class AddSoftdeletesToThreadsTable extends Migration
+class AddExpireTimeColumnToNotificationTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -12,8 +12,8 @@ class AddSoftdeletesToThreadsTable extends Migration
      */
     public function up()
     {
-        Schema::table('threads', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('notifications', function ($table) {
+            $table->timestamp('expire_time')->nullable();
         });
     }
 
@@ -24,8 +24,8 @@ class AddSoftdeletesToThreadsTable extends Migration
      */
     public function down()
     {
-        Schema::table('threads', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+        Schema::table('notifications', function ($table) {
+            $table->dropColumn('expire_time');
         });
     }
 }

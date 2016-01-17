@@ -25,9 +25,7 @@ class UserTransformer extends TransformerAbstract
 				'id'  =>  $item->id,
             'name'  =>  $item->name,
             'email'  =>  $item->email,
-            'password'  =>  $item->password,
             'confirmed'  =>  $item->confirmed,
-            'confirmation_code'  =>  $item->confirmation_code,
             'remember_token'  =>  $item->remember_token,
             'created_at'  =>  $item->created_at,
             'updated_at'  =>  $item->updated_at,
@@ -43,7 +41,14 @@ class UserTransformer extends TransformerAbstract
             'facebook_id'  =>  $item->facebook_id,
              'is_admin' => $this->isAdmin($item),
              'is_user' => $this->isUser($item),
-             'is_expert' => $this->isExpert($item)
+             'is_expert' => $this->isExpert($item),
+             'affiliation' => $item->affiliation,
+        'highest_degree'=> $item->highest_degree,
+        'specialization'=> $item->specialization,
+        'profession'=> $item->profession,
+        'linkedin_profile'=> $item->linkedin_profile,
+        'research_gate_id'=> $item->research_gate_id,
+        'resume'=> $item->resume
 
         ];
     }

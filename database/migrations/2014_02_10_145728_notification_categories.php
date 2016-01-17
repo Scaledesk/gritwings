@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateThreadsTable extends Migration
+class NotificationCategories extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -12,10 +13,10 @@ class CreateThreadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('threads', function (Blueprint $table) {
+        Schema::create('notification_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('subject');
-            $table->timestamps();
+            $table->string('name')->index();
+            $table->string('text');
         });
     }
 
@@ -26,6 +27,6 @@ class CreateThreadsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('threads');
+        Schema::drop('notification_categories');
     }
 }
