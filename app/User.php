@@ -31,6 +31,13 @@ class User extends Model implements AuthenticatableContract,AuthorizableContract
     const SOCIAL_AUTH_PROVIDER_ID           = 'social_auth_provider_id';
     const SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN = 'social_auth_provider_access_token';
     const FACEBOOK_ID                       = 'facebook_id';
+    const AFFILIATION = 'affiliation';
+    const HIGHEST_DEGREE = 'highest_degree';
+    const SPECIALIZATION = 'specialization';
+    const PROFESSION = 'profession';
+    const LINKEDIN_PROFILE = 'linkedin_profile';
+    const RESEARCH_GATE_ID =' research_gate_id';
+    const RESUME = 'resume';
 
     protected $table      = 'users';
     protected $fillable   = [
@@ -52,7 +59,14 @@ class User extends Model implements AuthenticatableContract,AuthorizableContract
         'social_auth_provider',
         'social_auth_provider_id',
         'social_auth_provider_access_token',
-        'facebook_id'
+        'facebook_id',
+        'affiliation',
+        'highest_degree',
+        'specialization',
+        'profession',
+        'linkedin_profile',
+        'research_gate_id',
+        'resume'
     ];
     public    $timestamps = false;
 

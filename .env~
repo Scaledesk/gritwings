@@ -1,11 +1,11 @@
 APP_ENV=local
 APP_DEBUG=true
-APP_KEY=SomeRandomString
+APP_KEY=OsfdCZf748XLVV6uYC1hDlkBaQfp7JVz
 
 DB_HOST=localhost
-DB_DATABASE=homestead
-DB_USERNAME=homestead
-DB_PASSWORD=secret
+DB_DATABASE=gritdb
+DB_USERNAME=root
+DB_PASSWORD=q1w2e3r4
 
 CACHE_DRIVER=file
 SESSION_DRIVER=file

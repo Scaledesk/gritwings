@@ -74,12 +74,18 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail(Authorizer::getResourceOwnerId());
+        $this->unguardIfNeeded();
+
 
         if (!$user) {
             return $this->errorNotFound();
         }
+        $user->fill($data);
+        $user->save();
+        return  $this->respondWithItem($user);
+echo "ok";
         $services= $data['child_services'];
-                        $user->childServices()->sync($services);
+        $user->childServices()->sync($services);
     }
     public function getNewExperts(){
         $role=Role::where('name','Expert')->select(['id'])->first();
