@@ -99,12 +99,14 @@ class AssignmentController extends Controller
         return $this->respondWithCollection($items);
     }
 
-    public function getAllAssignmentsByStatus($statusId)
+    public function getAllAssignmentsByStatus($statusId,$serviceId)
     {
 
         $with = $this->getEagerLoad();
 
-        $items = $this->model->where('status_id',$statusId)->get();
+        $items = $this->model->where('status_id',$statusId)->whereHas('childService', function ($query) use($serviceId) {
+            $query->where('parent_service_id', $serviceId);
+        })->get();
         return $this->respondWithCollection($items);
     }
 
