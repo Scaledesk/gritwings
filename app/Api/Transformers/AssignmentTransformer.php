@@ -41,7 +41,8 @@ class AssignmentTransformer extends TransformerAbstract
             Assignment::URGENCY => $item->urgency,
             Assignment::EXPECTED_COST => $item->expected_cost,
             'commission' => $item->commission,
-            'booking_amount' => $item->booking_amount
+            'booking_amount' => $item->booking_amount,
+            'completion_amount' => $item->completion_amount
 
         ];
     }

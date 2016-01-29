@@ -15,6 +15,8 @@ use Illuminate\View\View;
 use League\Fractal\Manager;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 use App\User;
+use Fenos\Notifynder\Facades\Notifynder;
+use  Illuminate\Support\Facades\Mail;
 class AssignmentController extends Controller
 {
     /**
@@ -147,7 +149,13 @@ class AssignmentController extends Controller
         $bidders = $data['bidders'];
         DB::delete('delete from bidder_assignment where assignment_id = ?',[$assignmentId]);
         foreach($bidders as $bidder){
+
             DB::insert('insert into bidder_assignment (assignment_id, bidder_id) values (?, ?)', [$assignmentId, $bidder]);
+            Notifynder::category('expert.new_assignment')
+                ->from('18')
+                ->to('19')
+                ->url('available-assignments')
+                ->send();
         }
         return $this->respondWithItem($this->model()->findorFail($assignmentId));
     }
@@ -269,5 +277,15 @@ class AssignmentController extends Controller
             'message'=>"success",
             'status_code'=>200
         ]);
+    }
+
+    public function sendInvoice($assignmentId){
+
+        $assignment = Assignment::findorFail($assignmentId);
+        $user = $assignment->user;
+        Mail::send('email.invoiceToUser', ['booking_amount' => $assignment->booking_amount,'completion_amount' => $assignment->completion_amount], function ($message) use ($user) {
+            $message->to($user->email, $user->name)
+                ->subject('Invoice for assignment');
+        });
     }
 }

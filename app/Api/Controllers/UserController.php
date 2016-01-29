@@ -176,11 +176,11 @@ echo "ok";
     }
     public function getUserNotifications(){
         $paginatedBool = (Input::has('paginatedBool') && Input::get('paginatedBool') == 1)?1:0;
-        return Notifynder::getAll(18,5,$paginatedBool);
+        return Notifynder::getAll(Authorizer::getResourceOwnerId(),5,$paginatedBool);
     }
     public function getUserNewNotifications(){
         $paginatedBool = (Input::has('paginationBool') && Input::get('paginationBool') == 1)?1:0;
-        return Notifynder::getNotRead(18,5,$paginatedBool);
+        return Notifynder::getNotRead(Authorizer::getResourceOwnerId(),5,$paginatedBool);
     }
     public function notify(){
         Notifynder::category(Input::get('category'))
