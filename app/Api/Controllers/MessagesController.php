@@ -11,6 +11,7 @@ use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
@@ -88,45 +89,25 @@ class MessagesController extends Controller
      * @param $id
      * @return mixed
      */
-    public function show($id)
+    public function show($subject)
     {
-        /*print_r($id);
-        print_r(Input::get('user_id'));*/
-        $thread = Thread::where('subject', "Assignment-" .$id."-".Input::get('user_id'))->first();
-        /*print_r($thread);
-        die;*/
-       /* if(is_null($thread)){
-            try {
-                $thread = Thread::findOrFail($id);
-            } catch (ModelNotFoundException $e) {
 
-                return $this->error('The thread with ID: ' . $id . ' was not found.', 404);
-            }
-        }*/
-        if(is_null($thread)){
-                $thread = Thread::create(
-                    [
-                        'subject' => "Assignment-" .$id."-".Input::get('user_id'),
-                    ]
-                );
+        try {
+            $thread = Thread::where('subject',$subject)->first();
+        } catch (ModelNotFoundException $e) {
+            echo "error";
         }
-
 
         // show current user in list if not a current participant
         // $users = User::whereNotIn('id', $thread->participantsUserIds())->get();
 
         // don't show the current user in list
         $userId = Authorizer::getResourceOwnerId();
-        /*$users = User::whereNotIn('id', $thread->participantsUserIds($userId))->get();*/
-        $messages = $thread->messages;
-        foreach ($messages as $message) {
-            if ($message->user_id == $userId) {
-                $message->update(['is_read' => 1]);
-            }
-        }
-//        $thread->markAsRead($userId);
+        $users = User::whereNotIn('id', $thread->participantsUserIds($userId))->get();
 
-        return compact('thread', 'messages');
+        $thread->markAsRead($userId);
+
+        return  $thread->messages;
     }
 
     /**
@@ -148,62 +129,30 @@ class MessagesController extends Controller
      */
     public function store()
     {
-        $input = Input::all();
-       
-             
-        if(Input::has('assignment_id')){
-            $thread = Thread::where('subject', "Assignment-" . Input::get('assignment_id')."-".Input::get('user_id'))->first();
+
+
+        if(Input::has('subject')){
+            $thread = Thread::where('subject', Input::get('subject'))->first();
             if(is_null($thread)){
                 $thread = Thread::create(
                     [
-                        'subject' => "Assignment-" . Input::get("assignment_id").Input::get('user_id'),
+                        'subject' => Input::get('subject'),
                     ]
                 );
             }
         }
-//        else{
-//            $thread = Thread::where('subject', "Admin-" . Authorizer::getResourceOwnerId())->first();
-//            if (Input::has('recipients')) {
-//                $thread = Thread::where('subject', "Admin-" . Input::get('recipients')[0])->first();
-//                /* print_r("Admin-".Input::get('recipients')[0]);
-//                 print_r($thread);
-//                 die;*/
-//            }
-//            if (is_null($thread)) {
-//                $thread = Thread::create(
-//                    [
-//                        'subject' => "Admin-" . Authorizer::getResourceOwnerId(),
-//                    ]
-//                );
-//            }
-//        }
 
         // Message
         Message::create(
             [
                 'thread_id' => $thread->id,
                 'user_id' => Authorizer::getResourceOwnerId(),
-                'body' => $input['message'],
+                'body' => Input::get('body'),
             ]
         );
 
-        /*// Sender
-        Participant::firstOrCreate(
-            [
-                'thread_id' => $thread->id,
-                'user_id'   => Authorizer::getResourceOwnerId(),
-                'last_read' => new Carbon,
-            ]
-        );*/
-        //sender
-        $thread->addParticipants([Authorizer::getResourceOwnerId()]);
 
-        // Recipients
-        if (Input::has('recipients')) {
-            $thread->addParticipants($input['recipients']);
-        } else {
-            $thread->addParticipants([$this->admin_id]);
-        }
+
 
         return $this->successWithData('','',['thread_id'=>$thread->id]);
     }
@@ -280,5 +229,35 @@ class MessagesController extends Controller
 
     }
 
+    public function getMessagesByThread($id){
+        $thread = Thread::findOrFail($id);
+        $thread->markAsRead(Authorizer::getResourceOwnerId());
+        return $thread->messages;
+    }
+
+    public function createNewThread(){
+
+        if(Thread::where('subject',Input::get('subject'))->first() == null)
+        {
+            $thread = Thread::create(
+                [
+                    'subject' => Input::get('subject'),
+                ]
+            );
+
+            Participant::create(
+                [
+                    'thread_id' => $thread->id,
+                    'user_id'   => Authorizer::getResourceOwnerId(),
+                    'last_read' => new Carbon,
+                ]
+            );
+
+            $thread->addParticipants([Input::get('participant_id')]);
+
+            return $thread;
+        }
+        return Thread::where('subject',Input::get('subject'))->first()->get();
+    }
 }
 

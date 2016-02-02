@@ -77,12 +77,8 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('read/{id}',function($id){
         return  Notifynder::readOne($id);
     });
+    Route::get('messages-by-thread/{subject}','MessagesController@show');
+    Route::post('message','MessagesController@store');
+    Route::post('thread','MessagesController@createNewThread');
 });
-//messages routes
-Route::group(['prefix' => 'api/v1/messages','namespace' => 'App\Api\Controllers'], function () {
-    Route::get('/', ['as' => 'messages', 'uses' => 'MessagesController@index']);
-    Route::get('create', ['as' => 'messages.create', 'uses' => 'MessagesController@create']);
-    Route::post('/', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
-    Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
-    Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
-});
+
