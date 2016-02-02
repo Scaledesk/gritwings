@@ -1,9 +1,10 @@
 <?php namespace App\Api\Transformers;
 
 use App\Assignment;
+use App\User;
+use Cmgmyr\Messenger\Models\Thread;
 use League\Fractal\TransformerAbstract;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
-
 class AssignmentTransformer extends TransformerAbstract
 {
     /**
@@ -16,7 +17,8 @@ class AssignmentTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         'status',
         'child_service',
-        'bids'
+        'bids',
+        'bidders'
     ];
 
     public function transform(Assignment $item)
@@ -42,11 +44,90 @@ class AssignmentTransformer extends TransformerAbstract
             Assignment::EXPECTED_COST => $item->expected_cost,
             'commission' => $item->commission,
             'booking_amount' => $item->booking_amount,
-            'completion_amount' => $item->completion_amount
-
+            'completion_amount' => $item->completion_amount,
+            'isUserThreadUnread' => $this->isUserThreadUnread($item),
+            'isExpertThreadUnread' => $this->isExpertThreadUnread($item),
+//            'isQueryThreadUnread' => $this->isQueryThreadUnread($item),
+            'unreadQueryThreads' => $this->unreadQueryThreads($item)
         ];
     }
 
+
+    public function isUserThreadUnread($assignment){
+        if($thread = Thread::where('subject', 'user-'.$assignment->id)->first())
+        {
+            return Thread::where('subject', 'user-'.$assignment->id)->first()->isUnread(Authorizer::getResourceOwnerId());
+        }
+        return false;
+    }
+    public function isExpertThreadUnread($assignment){
+        if($thread = Thread::where('subject', 'expert-'.$assignment->id)->first())
+        {
+            return Thread::where('subject', 'expert-'.$assignment->id)->first()->isUnread(Authorizer::getResourceOwnerId());
+        }
+        return false;
+    }
+    public function isQueryThreadUnread($assignment){
+        $flag = false;
+        if($threads = Thread::where('subject','LIKE', '%query-'.$assignment->id.'%')->get())
+        {
+            foreach($threads as $thread)
+            {
+                if($thread->isUnread(Authorizer::getResourceOwnerId()))
+                {
+                    $flag = true;
+                }
+            }
+        }
+        return $flag;
+    }
+    public function unreadQueryThreads($assignment){
+        $unreadThreads = [];
+        if($threads = Thread::where('subject','LIKE', '%query-'.$assignment->id.'%')->get())
+        {
+            foreach($threads as $thread)
+            {
+                if($thread->isUnread(Authorizer::getResourceOwnerId()))
+                {
+                    array_push($unreadThreads,$thread->subject);
+                }
+            }
+        }
+        return $unreadThreads;
+    }
+    public function isAdmin($user){
+        $roles = $user->roles->toArray();
+        foreach($roles as $role)
+        {
+            if($role['id'] == 1)
+            {
+                return 1;
+            }
+        }
+        return 0;
+    }
+    public function isUser($user){
+        $roles = $user->roles->toArray();
+        foreach($roles as $role)
+        {
+            if($role['id'] == 2)
+            {
+                return 1;
+            }
+        }
+        return 0;
+    }
+    public function isExpert($user){
+        $roles = $user->roles->toArray();
+        foreach($roles as $role)
+        {
+            if($role['id'] == 3)
+            {
+                return 1;
+            }
+        }
+        return 0;
+    }
     public function includeStatus(Assignment $assignment)
     {
         if ($assignment->assignmentStatus) {
@@ -72,7 +153,11 @@ class AssignmentTransformer extends TransformerAbstract
         return $this->collection($assignment->bids()
                                          ->get(), new BidTransformer());
     }
-
+    public function includeBidders(Assignment $assignment)
+    {
+        return $this->collection($assignment->bidders()
+            ->get(), new UserTransformer());
+    }
     public function userBidPlaced(Assignment $assignment)
     {
 

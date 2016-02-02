@@ -79,5 +79,8 @@ class Assignment extends Model
     public function transactions(){
         return $this->hasMany('App\Assignment','assignment_id');
     }
+    public function bidders(){
+        return  $this->belongsToMany('App\User','bidder_assignment', 'assignment_id', 'bidder_id');
 
+    }
 }

@@ -17,6 +17,9 @@ use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 use App\User;
 use Fenos\Notifynder\Facades\Notifynder;
 use  Illuminate\Support\Facades\Mail;
+use Cmgmyr\Messenger\Models\Thread;
+use Cmgmyr\Messenger\Models\Participant;
+use Carbon\Carbon;
 class AssignmentController extends Controller
 {
     /**
@@ -88,6 +91,21 @@ class AssignmentController extends Controller
       /*  Assignment_Transaction::create([
 
         ]);*/
+        $thread = Thread::create(
+            [
+                'subject' => 'user-'.$item->id,
+            ]
+        );
+
+        Participant::create(
+            [
+                'thread_id' => $thread->id,
+                'user_id'   => Authorizer::getResourceOwnerId(),
+                'last_read' => new Carbon,
+            ]
+        );
+
+        $thread->addParticipants([18]);
 
         return $this->respondWithItem($item);
     }
