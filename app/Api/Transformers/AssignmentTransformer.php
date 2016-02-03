@@ -18,7 +18,8 @@ class AssignmentTransformer extends TransformerAbstract
         'status',
         'child_service',
         'bids',
-        'bidders'
+        'bidders',
+        'bid'
     ];
 
     public function transform(Assignment $item)
@@ -48,7 +49,8 @@ class AssignmentTransformer extends TransformerAbstract
             'isUserThreadUnread' => $this->isUserThreadUnread($item),
             'isExpertThreadUnread' => $this->isExpertThreadUnread($item),
 //            'isQueryThreadUnread' => $this->isQueryThreadUnread($item),
-            'unreadQueryThreads' => $this->unreadQueryThreads($item)
+            'unreadQueryThreads' => $this->unreadQueryThreads($item),
+            'created_at' => $item->created_at
         ];
     }
 
@@ -157,6 +159,16 @@ class AssignmentTransformer extends TransformerAbstract
     {
         return $this->collection($assignment->bidders()
             ->get(), new UserTransformer());
+    }
+    public function includeBid(Assignment $assignment)
+    {
+        if($assignment->bid()
+            ->get()->first())
+        {
+            return $this->item($assignment->bid()
+                ->get()->first(), new BidTransformer());
+        }
+        return null;
     }
     public function userBidPlaced(Assignment $assignment)
     {

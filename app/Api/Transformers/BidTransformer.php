@@ -24,6 +24,7 @@ class BidTransformer extends TransformerAbstract
             'comments'  =>  $item->comments,
             'user_id'  =>  $item->user_id,
             'assignment_id'  =>  $item->assignment_id,
+            'created_at' => $item->created_at
             
         ];
     }
