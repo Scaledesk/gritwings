@@ -50,7 +50,7 @@ class Assignment extends Model
         'total_amount',
         'completion_amount'
     ];
-    public    $timestamps = false;
+    public    $timestamps = true;
 
     public function childService()
     {

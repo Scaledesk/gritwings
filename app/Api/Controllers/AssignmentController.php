@@ -215,7 +215,7 @@ class AssignmentController extends Controller
         ]);
         $assignment=Assignment::where('id',$assignment_id)->first();
         $assignment->update(['status_id'=>3]);
-//        return Redirect::away('http://localhost:3000/#/user-dashboard?a=active-assignments&payment=success');
+//        return Redirect::away('http://local.zolo.com/#/user-dashboard?a=active-assignments&payment=success');
         return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=success');
 
     }
@@ -246,8 +246,8 @@ class AssignmentController extends Controller
 //        "surl"=>"http://localhost:8000/api/v1/completionPayment_success/",
 //            "furl"=>"http://localhost:8000/api/v1/completionPayment_failure/"
             "surl"=>"http://54.200.205.117/api/v1/completionPayment_success/",
-            "furl"=>"http://54.200.205.117/api/v1/completionPayment_failure/",]);
-//]);
+            "furl"=>"http://54.200.205.117/api/v1/completionPayment_failure/",
+]);
     }
 
     public function completionSuccessPayment(){
@@ -262,7 +262,7 @@ class AssignmentController extends Controller
         $assignment=Assignment::where('id',$assignment_id)->first();
         $assignment->update(['status_id'=>6]);
         return Redirect::away('http://angular.gritwings.com/#/user-dashboard?a=active-assignments&payment=success');
-//        return Redirect::away('http://localhost:3000/#/user-dashboard?a=active-assignments&payment=success');
+//        return Redirect::away('http://local.zolo.com/#/user-dashboard?a=active-assignments&payment=success');
 
     }
     public function completionFailurePayment(){

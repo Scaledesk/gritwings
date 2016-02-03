@@ -12,7 +12,7 @@ class Bid extends Model {
         
     protected $table = 'bids';
     protected $fillable = ['id', 'amount', 'delivery_date', 'comments', 'user_id', 'assignment_id'];
-	public $timestamps = false;
+	public $timestamps = true;
 
     public function assignment() {
         return $this->belongsTo('App\Assignment', 'assignment_id', 'id');
