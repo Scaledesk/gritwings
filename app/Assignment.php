@@ -25,6 +25,8 @@ class Assignment extends Model
     const COMMISSION = 'commission';
     const COMPLETION_AMOUNT='completion_amount';
     const TOTAL_AMOUNT='total_amount';
+    const MINIMUN_BID='minimum_bid';
+    const MAXIMUM_BID='maximum_bid';
 
     protected $table      = 'assignments';
     protected $fillable   = [
@@ -48,9 +50,11 @@ class Assignment extends Model
         'expected_cost',
         'urgency',
         'total_amount',
-        'completion_amount'
+        'completion_amount',
+        'minimum_bid',
+        'maximum_bid'
     ];
-    public    $timestamps = true;
+    public $timestamps = true;
 
     public function childService()
     {
