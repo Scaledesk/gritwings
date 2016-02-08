@@ -50,7 +50,9 @@ class AssignmentTransformer extends TransformerAbstract
             'isExpertThreadUnread' => $this->isExpertThreadUnread($item),
 //            'isQueryThreadUnread' => $this->isQueryThreadUnread($item),
             'unreadQueryThreads' => $this->unreadQueryThreads($item),
-            'created_at' => $item->created_at
+            'created_at' => $item->created_at,
+            'minimum_bid' => $item->minimum_bid,
+            'maximum_bid' => $item->maximum_bid
         ];
     }
 
