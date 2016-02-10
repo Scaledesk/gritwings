@@ -157,7 +157,7 @@ class AssignmentController extends Controller
         array_push($arr,$service['id']);
         }
 
-        $items = $this->model->where('status_id',7)->whereIn('child_service_id',$arr)->get();
+        $items = $this->model->where('status_id',7)->where('last_bidding_date','>=',Carbon::now()->format('Y-m-d'))->whereIn('child_service_id',$arr)->get();
         return $this->respondWithCollection($items);
     }
 
