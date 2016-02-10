@@ -179,7 +179,7 @@ class AssignmentController extends Controller
     }
     public function expertDenyAssignment($assignmentId){
 
-        DB::delete('delete from bidder_assignment where assignment_id = ? and bidder_id = ?',[$assignmentId],Authorizer::getResourceOwnerId());
+        DB::delete('delete from bidder_assignment where assignment_id = ? and bidder_id = ?',[$assignmentId,Authorizer::getResourceOwnerId()]);
 
         return $this->respondWithItem($this->model()->findorFail($assignmentId));
     }
