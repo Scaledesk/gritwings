@@ -156,13 +156,13 @@ class AssignmentController extends Controller
 //        foreach($services as $service){
 //        array_push($arr,$service['id']);
 //        }
+        $assignments = [];
         $assignment_array = DB::table('bidder_assignment')->select('*')->where('bidder_id','=',Authorizer::getResourceOwnerId())->get();
         foreach($assignment_array as $assignment){
-            echo $assignment->assignment_id;
-            die();
+            array_push(Assignment::findOrFail($assignments,$assignment->assignment_id));
         }
-        $items = $this->model->where('status_id',7)->where('last_bidding_date','>=',Carbon::now()->format('Y-m-d'))->whereIn('child_service_id',$arr)->get();
-        return $this->respondWithCollection($items);
+//        $items = $this->model->where('status_id',7)->where('last_bidding_date','>=',Carbon::now()->format('Y-m-d'))->whereIn('child_service_id',$arr)->get();
+        return $this->respondWithCollection($assignments);
     }
 
     public function updateAssignmentBidders($assignmentId){
