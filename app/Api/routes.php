@@ -74,6 +74,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('notifications','UserController@getUserNotifications');
     Route::get('new-notifications','UserController@getUserNewNotifications');
     Route::get('send-invoice/{id}','AssignmentController@sendInvoice');
+    Route::get('expert-deny-assignment/{id}','AssignmentController@expertDenyAssignment');
     Route::get('read/{id}',function($id){
         return  Notifynder::readOne($id);
     });
