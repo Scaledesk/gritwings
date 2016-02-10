@@ -160,8 +160,8 @@ class AssignmentController extends Controller
         $assignment_array = DB::table('bidder_assignment')->select('*')->where('bidder_id','=',Authorizer::getResourceOwnerId())->get();
         foreach($assignment_array as $assignment){
             $assignment = Assignment::findOrFail($assignment->assignment_id);
-            echo $assignment->last_bidding_date;
-            echo Carbon::now()->format('Y-m-d');
+            echo Carbon::parse($assignment->last_bidding_date);
+            echo Carbon::now()->diff(Carbon::parse($assignment->last_bidding_date));
             if($assignment->last_bidding_date >= Carbon::now()->format('Y-m-d'));
             {
                 array_push($assignments, $assignment);
