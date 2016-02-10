@@ -161,7 +161,7 @@ class AssignmentController extends Controller
         foreach($assignment_array as $assignment){
             $assignment = Assignment::findOrFail($assignment->assignment_id);
             echo Carbon::parse($assignment->last_bidding_date);
-            print_r(Carbon::now()->diff(Carbon::parse($assignment->last_bidding_date)))
+            print_r(Carbon::now()->diff(Carbon::parse($assignment->last_bidding_date)));
 //            echo Carbon::now()->diff(Carbon::parse($assignment->last_bidding_date));
             if($assignment->last_bidding_date >= Carbon::now()->format('Y-m-d'));
             {
