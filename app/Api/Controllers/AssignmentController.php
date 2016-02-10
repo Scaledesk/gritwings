@@ -177,6 +177,12 @@ class AssignmentController extends Controller
         }
         return $this->respondWithItem($this->model()->findorFail($assignmentId));
     }
+    public function expertDenyAssignment($assignmentId){
+
+        DB::delete('delete from bidder_assignment where assignment_id = ? and bidder_id = ?',[$assignmentId],Authorizer::getResourceOwnerId());
+
+        return $this->respondWithItem($this->model()->findorFail($assignmentId));
+    }
     public function doPayment($assignment_id,$user_id){
         $transaction=Assignment_Transaction::where('assignment_id',$assignment_id)->where('payment_type','booking_amount')->first();
         $user=User::where('id',$user_id)->first();
