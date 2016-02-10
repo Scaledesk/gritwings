@@ -52,7 +52,8 @@ class AssignmentTransformer extends TransformerAbstract
             'unreadQueryThreads' => $this->unreadQueryThreads($item),
             'created_at' => $item->created_at,
             'minimum_bid' => $item->minimum_bid,
-            'maximum_bid' => $item->maximum_bid
+            'maximum_bid' => $item->maximum_bid,
+            'last_bidding_date' => $item->last_bidding_date
         ];
     }
 

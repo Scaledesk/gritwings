@@ -27,6 +27,7 @@ class Assignment extends Model
     const TOTAL_AMOUNT='total_amount';
     const MINIMUN_BID='minimum_bid';
     const MAXIMUM_BID='maximum_bid';
+    const LAST_BIDDING_DATE = 'last_bidding_date';
 
     protected $table      = 'assignments';
     protected $fillable   = [
@@ -52,7 +53,8 @@ class Assignment extends Model
         'total_amount',
         'completion_amount',
         'minimum_bid',
-        'maximum_bid'
+        'maximum_bid',
+        'last_bidding_date'
     ];
     public $timestamps = true;
 
