@@ -81,5 +81,8 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('messages-by-thread/{subject}','MessagesController@show');
     Route::post('message','MessagesController@store');
     Route::post('thread','MessagesController@createNewThread');
+    Route::get('unread-threads','MessagesController@getThreadsWithNewMessages');
+    Route::put('change-password','UserController@changePassword');
+    Route::post('forgot-password','UserController@forgotPassword');
 });
 

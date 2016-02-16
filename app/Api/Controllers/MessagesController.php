@@ -73,7 +73,7 @@ class MessagesController extends Controller
     /**
      * @return array
      */
-    public function getNewThreads()
+    public function getThreadsWithNewMessages()
     {
 
         $currentUserId = Authorizer::getResourceOwnerId();
