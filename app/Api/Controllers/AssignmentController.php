@@ -132,7 +132,7 @@ class AssignmentController extends Controller
 
     public function getExpertUndergoingAssignments(){
         $userId = Authorizer::getResourceOwnerId();
-        $status = [2,3,4,5,6];
+        $status = [3,4,5,6];
 
         $items = $this->model->whereIn('status_id',$status)->whereHas('bid', function ($query) {
             $query->where('user_id', Authorizer::getResourceOwnerId());
@@ -158,17 +158,22 @@ class AssignmentController extends Controller
 //        }
         $assignments = [];
         $assignment_array = DB::table('bidder_assignment')->select('*')->where('bidder_id','=',Authorizer::getResourceOwnerId())->get();
-        foreach($assignment_array as $assignment){
-            $assignment = Assignment::findOrFail($assignment->assignment_id);
-            echo Carbon::parse($assignment->last_bidding_date);
-            print_r(Carbon::now()->diff(Carbon::parse($assignment->last_bidding_date)));
-            die();
+        foreach($assignment_array as $row){
+            $assignment = Assignment::findOrFail($row->assignment_id);
+//            print_r(Carbon::parse($assignment->last_bidding_date));
+//            echo "<br>";
+//            print_r(Carbon::today());
+//            echo "<br>";
+//s
+//            print_r(Carbon::now()->gte(Carbon::parse($assignment->last_bidding_date)));
+//            die();
 //            echo Carbon::now()->diff(Carbon::parse($assignment->last_bidding_date));
-            if($assignment->last_bidding_date >= Carbon::now()->format('Y-m-d'));
+            if(Carbon::today()->lte(Carbon::parse($assignment->last_bidding_date)))
             {
                 array_push($assignments, $assignment);
             }
         }
+
 //        $items = $this->model->where('status_id',7)->where('last_bidding_date','>=',Carbon::now()->format('Y-m-d'))->whereIn('child_service_id',$arr)->get();
         return $this->respondWithCollection($assignments);
     }

@@ -12,7 +12,7 @@ class BidTransformer extends TransformerAbstract
      * @return array
      */
      protected $defaultIncludes = [
-        
+        'user'
         ];
 
     public function transform(Bid $item)
@@ -29,6 +29,9 @@ class BidTransformer extends TransformerAbstract
         ];
     }
 
-
+    public function includeUser(Bid $item){
+        return $this->item($item->user
+           , new UserTransformer());
+    }
 }
 
