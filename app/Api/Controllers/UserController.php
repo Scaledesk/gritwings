@@ -38,7 +38,7 @@ class UserController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->middleware('oauth', ['except' => ['index']]);
+        $this->middleware('oauth', ['except' => ['index','forgotPassword']]);
 
         $this->model       = $this->model();
         $this->transformer = $this->transformer();
@@ -82,10 +82,14 @@ class UserController extends Controller
         }
         $user->fill($data);
         $user->save();
+        if(isset($data['child_services']))
+        {
+            $services= $data['child_services'];
+            $user->childServices()->sync($services);
+        }
+
         return  $this->respondWithItem($user);
-echo "ok";
-        $services= $data['child_services'];
-        $user->childServices()->sync($services);
+
     }
     public function getNewExperts(){
         $role=Role::where('name','Expert')->select(['id'])->first();
@@ -191,5 +195,24 @@ echo "ok";
         return $this->respondWithArray([
             'status_code'=>200
         ]);
+    }
+
+    public function changePassword()
+    {
+        $user = User::findOrFail(Authorizer::getResourceOwnerId());
+        $data = (Input::get('data'));
+        $user->password = bcrypt($data['new_password']);
+
+        $user->save();
+        return  $this->respondWithItem($user);
+    }
+    public function forgotPassword()
+    {
+        $data = (Input::get('data'));
+        $user = User::where('email',$data)->first();
+        Mail::send('email.forgotPassword', ['password' => $user->password], function ($message) use ($user) {
+            $message->to($user->email, $user->name)
+                ->subject('Password request - GritWings');
+        });
     }
 }
