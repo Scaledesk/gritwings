@@ -38,7 +38,7 @@ class User extends Model implements AuthenticatableContract,AuthorizableContract
     const LINKEDIN_PROFILE = 'linkedin_profile';
     const RESEARCH_GATE_ID =' research_gate_id';
     const RESUME = 'resume';
-
+    const RATING = 'rating';
     protected $table      = 'users';
     protected $fillable   = [
         'id',
@@ -66,7 +66,8 @@ class User extends Model implements AuthenticatableContract,AuthorizableContract
         'profession',
         'linkedin_profile',
         'research_gate_id',
-        'resume'
+        'resume',
+        'rating'
     ];
     public    $timestamps = false;
 

@@ -60,13 +60,20 @@ class UserController extends Controller
 
 
     public function getExpertsOfService($serviceId){
-        $users = $this->model()->whereHas('childServices', function ($query) use($serviceId) {
+        $users = $this->model()->where('confirmed','1')->whereHas('childServices', function ($query) use($serviceId) {
             $query->where('id', $serviceId);
+        })->get();
+        return $this->respondWithCollection($users);
+    }
+
+    public function getAllExperts(){
+        $users = $this->model()->where('confirmed','1')->whereHas('roles', function ($query)  {
+            $query->where('roles.id', 3);
         })->get();
 
         return $this->respondWithCollection($users);
-
     }
+
     public function updateProfile(){
         $data = $this->request->json()->get($this->resourceKeySingular);
         if (!$data) {
@@ -214,5 +221,11 @@ class UserController extends Controller
             $message->to($user->email, $user->name)
                 ->subject('Password request - GritWings');
         });
+    }
+    public function updateExpertRating($userId){
+        $user = User::findOrFail($userId);
+        $user->rating = Input::get('rating');
+        $user->save();
+        return  $this->respondWithItem($user);
     }
 }

@@ -84,5 +84,7 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'App\Api\Controllers'], funct
     Route::get('unread-threads','MessagesController@getThreadsWithNewMessages');
     Route::put('change-password','UserController@changePassword');
     Route::post('forgot-password','UserController@forgotPassword');
+    Route::get('all-experts','UserController@getAllExperts');
+    Route::put('update-expert-rating/{userId}','UserController@updateExpertRating');
 });
 

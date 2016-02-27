@@ -48,7 +48,8 @@ class UserTransformer extends TransformerAbstract
         'profession'=> $item->profession,
         'linkedin_profile'=> $item->linkedin_profile,
         'research_gate_id'=> $item->research_gate_id,
-        'resume'=> $item->resume
+        'resume'=> $item->resume,
+            'rating' => $item->rating
 
         ];
     }
