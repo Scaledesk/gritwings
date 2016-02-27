@@ -82,10 +82,11 @@ class AuthController extends Controller
             }
 
             $provider = Socialite::driver('google');
+
             $provider->stateless();
 
         $profile      = $provider->user();
-            return $profile;
+
             $email        = $profile->email;
             $name         = $profile->name;
             $google_token = $profile->token;

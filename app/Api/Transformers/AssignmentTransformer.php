@@ -19,7 +19,8 @@ class AssignmentTransformer extends TransformerAbstract
         'child_service',
         'bids',
         'bidders',
-        'bid'
+        'bid',
+        'transactions'
     ];
 
     public function transform(Assignment $item)
@@ -172,6 +173,11 @@ class AssignmentTransformer extends TransformerAbstract
                 ->get()->first(), new BidTransformer());
         }
         return null;
+    }
+    public function includeTransactions(Assignment $assignment)
+    {
+        return $this->collection($assignment->transactions()
+            ->get(), new AssignmentTransactionTransformer());
     }
     public function userBidPlaced(Assignment $assignment)
     {
