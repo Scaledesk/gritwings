@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('status', function(){
+    return \Illuminate\Support\Facades\Response::json(['status'=>'online']);
+});
+Route::get('records', 'RecordsController@index');
+Route::post('records', 'RecordsController@store');
