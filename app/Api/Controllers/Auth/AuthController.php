@@ -85,7 +85,7 @@ class AuthController extends Controller
 
             $provider->stateless();
 
-        $profile      = $provider->user();
+                $profile      = $provider->user();
 
             $email        = $profile->email;
             $name         = $profile->name;
@@ -112,6 +112,7 @@ class AuthController extends Controller
                 $response = Response::json($user);
                 return $response;
             } else {
+                $user->google_id = $google_id;
                 $user->social_auth_provider_access_token = $profile->token;
                 $user->social_auth_provider_id           = $profile->id;
                 $user->social_auth_provider              = 'google';
@@ -124,10 +125,10 @@ class AuthController extends Controller
 
     public function verify_social($social_auth_provider_id, $social_auth_provider_access_token)
     {
+
         $user = User::where('social_auth_provider_id', $social_auth_provider_id)
                     ->where('social_auth_provider_access_token', $social_auth_provider_access_token)
                     ->first();
-
         if ($user) {
             return $user->id;
         }

@@ -29,7 +29,7 @@ class SocialGrant extends AbstractGrant
      *
      * @var string
      */
-    protected $identifier = 'social';
+    protected $identifier = 'google';
 
     /**
      * Response type
